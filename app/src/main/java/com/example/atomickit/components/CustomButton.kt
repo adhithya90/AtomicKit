@@ -14,7 +14,10 @@ import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -59,7 +62,7 @@ data class BoxShadow(
 )
 
 /**
- * Custom Button with advanced box shadow capabilities
+ * Custom Button with advanced box shadow capabilities and max width support for responsive layouts
  *
  * @param onClick The callback to be invoked when the button is clicked.
  * @param modifier The modifier to be applied to the button.
@@ -74,6 +77,8 @@ data class BoxShadow(
  * @param disabledBoxShadow The box shadow configuration when the button is disabled.
  * @param border Optional border for the button.
  * @param contentPadding The padding values to be applied to the content of the button.
+ * @param maxWidth Optional maximum width for the button, useful for responsive layouts.
+ * @param horizontalAlignment Alignment of the button within its container when maxWidth is set.
  * @param interactionSource The MutableInteractionSource representing the stream of interactions for this button.
  * @param content The content of the button.
  */
@@ -105,6 +110,8 @@ fun CustomButton(
     ),
     border: BorderStroke? = null,
     contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+    maxWidth: Dp? = null,
+    horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     content: @Composable () -> Unit
 ) {
@@ -135,37 +142,56 @@ fun CustomButton(
         label = "boxShadow"
     )
 
+    // Handle maxWidth and horizontal alignment
     Box(
-        modifier = modifier
-            .drawWithBoxShadow(currentShadow, shape)
-            .clip(shape)
-            .background(bgColor)
-            .then(
-                if (border != null) Modifier.applyButtonBorder(border, shape)
-                else Modifier
-            )
-            .clickable(
-                onClick = onClick,
-                enabled = enabled,
-                role = Role.Button,
-                interactionSource = interactionSource,
-                indication = null
-            )
-            .defaultMinSize(minWidth = 64.dp, minHeight = 36.dp)
-            .semantics { role = Role.Button },
-        contentAlignment = Alignment.Center
+        modifier = Modifier.fillMaxWidth(),
+        contentAlignment = when (horizontalAlignment) {
+            Alignment.Start -> Alignment.CenterStart
+            Alignment.End -> Alignment.CenterEnd
+            else -> Alignment.Center
+        }
     ) {
-        // Apply the content color
-        val finalContentColor = when {
-            !enabled -> disabledContentColor
-            else -> contentColor
+        // Apply max width constraint to the button
+        val buttonModifier = if (maxWidth != null) {
+            // Use explicit width instead of widthIn for more reliable sizing
+            Modifier.width(maxWidth)
+        } else {
+            // Use the original modifier as is (might be fillMaxWidth or custom)
+            modifier
         }
 
-        androidx.compose.runtime.CompositionLocalProvider(
-            LocalContentColor provides finalContentColor
+        Box(
+            modifier = buttonModifier
+                .drawWithBoxShadow(currentShadow, shape)
+                .clip(shape)
+                .background(bgColor)
+                .then(
+                    if (border != null) Modifier.applyButtonBorder(border, shape)
+                    else Modifier
+                )
+                .clickable(
+                    onClick = onClick,
+                    enabled = enabled,
+                    role = Role.Button,
+                    interactionSource = interactionSource,
+                    indication = null
+                )
+                .defaultMinSize(minWidth = 64.dp, minHeight = 36.dp)
+                .semantics { role = Role.Button },
+            contentAlignment = Alignment.Center
         ) {
-            Box(modifier = Modifier.padding(contentPadding)) {
-                content()
+            // Apply the content color
+            val finalContentColor = when {
+                !enabled -> disabledContentColor
+                else -> contentColor
+            }
+
+            androidx.compose.runtime.CompositionLocalProvider(
+                LocalContentColor provides finalContentColor
+            ) {
+                Box(modifier = Modifier.padding(contentPadding)) {
+                    content()
+                }
             }
         }
     }
@@ -285,7 +311,9 @@ fun CustomButton(
         color = Color(0x20000000)
     ),
     border: BorderStroke? = null,
-    contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+    contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+    maxWidth: Dp? = null,
+    horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally
 ) {
     CustomButton(
         onClick = onClick,
@@ -299,7 +327,9 @@ fun CustomButton(
         boxShadow = boxShadow,
         pressedBoxShadow = pressedBoxShadow,
         border = border,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
+        maxWidth = maxWidth,
+        horizontalAlignment = horizontalAlignment
     ) {
         Text(text = text)
     }
@@ -359,70 +389,4 @@ fun Text(
         maxLines = maxLines,
         overflow = overflow
     )
-}
-
-// Preview for the CustomButton
-@androidx.compose.ui.tooling.preview.Preview
-@Composable
-fun CustomButtonPreview() {
-    androidx.compose.foundation.layout.Column(
-        modifier = Modifier
-            .padding(16.dp)
-            .background(Color.White),
-        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp)
-    ) {
-        // Default button
-        CustomButton(
-            onClick = { /* do nothing */ },
-            text = "Default Button"
-        )
-
-        // Button with custom shadow
-        CustomButton(
-            onClick = { /* do nothing */ },
-            text = "Custom Shadow",
-            backgroundColor = Color(0xFF6366F1),
-            boxShadow = BoxShadow(
-                offsetY = 4.dp,
-                blurRadius = 8.dp,
-                spreadRadius = 1.dp,
-                color = Color(0x406366F1) // Semi-transparent indigo
-            )
-        )
-
-        // Button with multiple shadows
-        CustomButton(
-            onClick = { /* do nothing */ },
-            text = "No Shadow",
-            backgroundColor = Color(0xFFF59E0B),
-            boxShadow = BoxShadow(
-                offsetX = 0.dp,
-                offsetY = 0.dp,
-                blurRadius = 0.dp,
-                spreadRadius = 0.dp,
-                color = Color.Transparent
-            )
-        )
-
-        // Disabled button
-        CustomButton(
-            onClick = { /* do nothing */ },
-            text = "Disabled Button",
-            enabled = false
-        )
-
-        // Button with border
-        CustomButton(
-            onClick = { /* do nothing */ },
-            text = "Bordered Button",
-            backgroundColor = Color.White,
-            contentColor = Color(0xFF3B82F6),
-            border = BorderStroke(1.dp, Color(0xFF3B82F6)),
-            boxShadow = BoxShadow(
-                offsetY = 2.dp,
-                blurRadius = 4.dp,
-                color = Color(0x203B82F6)
-            )
-        )
-    }
 }

@@ -13,6 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -20,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.example.atomickit.components.BoxShadow
 import com.example.atomickit.components.CustomButton
@@ -45,7 +49,7 @@ fun ButtonTypographyDemo() {
                 .fillMaxSize()
                 .background(Color(0xFFF8F9FA))
                 .verticalScroll(rememberScrollState())
-                .padding(24.dp),
+                .padding(vertical = 40.dp, horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(32.dp)
         ) {
             // Header
@@ -84,15 +88,25 @@ fun ButtonTypographyDemo() {
                 // Standard button
                 CustomButton(
                     onClick = { /* do nothing */ },
-                    text = "Standard Button",
-                    modifier = Modifier.fillMaxWidth(),
-                    backgroundColor = Color(0xFF3B82F6),
-                    boxShadow = BoxShadow(
-                        offsetY = 3.dp,
-                        blurRadius = 6.dp,
-                        color = Color(0x403B82F6)
-                    )
+                    text = "Standard Button"
                 )
+
+
+                // Standard button (full width)
+                CustomButton(
+                    onClick = { /* action */ },
+                    text = "Full Width",
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+// Button with max width (centered)
+                CustomButton(
+                    onClick = { /* action */ },
+                    text = "Constrained Width",
+                    modifier = Modifier.fillMaxWidth(),
+                    maxWidth = 180.dp
+                )
+
 
                 // Asymmetric corners
                 CustomButton(
@@ -181,10 +195,6 @@ fun ButtonTypographyDemo() {
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
                     // Top corners only
                     CustomButton(
                         onClick = { /* do nothing */ },
@@ -222,27 +232,8 @@ fun ButtonTypographyDemo() {
                             color = Color(0x40EC4899)
                         )
                     )
-                }
 
-                // Card style button with extra large left corners
-                CustomButton(
-                    onClick = { /* do nothing */ },
-                    text = "Card Style Button",
-                    modifier = Modifier.fillMaxWidth(),
-                    backgroundColor = Color(0xFF64748B),
-                    shape = RoundedCornerShape(
-                        topStart = 24.dp,
-                        topEnd = 4.dp,
-                        bottomStart = 24.dp,
-                        bottomEnd = 4.dp
-                    ),
-                    boxShadow = BoxShadow(
-                        offsetX = 2.dp,
-                        offsetY = 2.dp,
-                        blurRadius = 8.dp,
-                        color = Color(0x4064748B)
-                    )
-                )
+
             }
 
             // Typography Showcase Section
@@ -307,6 +298,7 @@ fun ButtonTypographyDemo() {
     }
 }
 
+@PreviewScreenSizes
 @Preview(showBackground = true, heightDp = 1200)
 @Composable
 fun ButtonTypographyDemoPreview() {
