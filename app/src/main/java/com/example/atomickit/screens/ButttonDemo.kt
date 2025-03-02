@@ -18,7 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -359,7 +359,7 @@ fun getMessageBubbleShape(): CornerBasedShape {
 /**
  * Preview for the custom corner radius buttons sample
  */
-@Preview(showBackground = true)
+@Preview(showBackground = true, heightDp = 1100)
 @Composable
 fun CustomCornerRadiusButtonsPreview() {
     CustomCornerRadiusButtons()

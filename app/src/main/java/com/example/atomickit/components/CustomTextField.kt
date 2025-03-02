@@ -16,7 +16,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -124,14 +126,15 @@ fun CustomTextField(
                     .padding(bottom = 6.dp)
                     .fillMaxWidth()
             ) {
-                ProvideTextStyle(
-                    value = TextStyle(
+                CompositionLocalProvider(
+                    LocalTextStyle provides TextStyle(
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         color = if (isError) errorBorderColor else Color(0xFF4B5563)
-                    ),
-                    content = label
-                )
+                    )
+                ) {
+                    label()
+                }
             }
         }
 
@@ -187,10 +190,11 @@ fun CustomTextField(
 
                     // Show placeholder if the text field is empty
                     if (value.isEmpty() && placeholder != null) {
-                        ProvideTextStyle(
-                            value = textStyle.copy(color = Color(0xFF9CA3AF)),
-                            content = placeholder
-                        )
+                        CompositionLocalProvider(
+                            LocalTextStyle provides textStyle.copy(color = Color(0xFF9CA3AF))
+                        ) {
+                            placeholder()
+                        }
                     }
                 }
 
@@ -213,33 +217,18 @@ fun CustomTextField(
                     .padding(top = 4.dp)
                     .fillMaxWidth()
             ) {
-                ProvideTextStyle(
-                    value = TextStyle(
+                CompositionLocalProvider(
+                    LocalTextStyle provides TextStyle(
                         fontSize = 12.sp,
                         color = errorBorderColor
-                    ),
-                    content = errorMessage
-                )
+                    )
+                ) {
+                    errorMessage()
+                }
             }
         }
     }
 }
-
-// Helper function to provide a text style to its content
-@Composable
-private fun ProvideTextStyle(
-    value: TextStyle,
-    content: @Composable () -> Unit
-) {
-    androidx.compose.runtime.CompositionLocalProvider(
-        LocalTextStyle provides value
-    ) {
-        content()
-    }
-}
-
-// Local text style provider
-private val LocalTextStyle = androidx.compose.runtime.compositionLocalOf { TextStyle() }
 
 // TextField with TextFieldValue variant
 @Composable
@@ -265,10 +254,139 @@ fun CustomTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     singleLine: Boolean = false,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
-    shape: Shape = RoundedCornerShape(8.dp)
+    shape: Shape = RoundedCornerShape(8.dp),
+    borderWidth: Dp = 1.dp,
+    backgroundColor: Color = Color(0xFFF9FAFB),
+    cursorColor: Color = Color(0xFF3B82F6),
+    focusedBorderColor: Color = Color(0xFF3B82F6),
+    unfocusedBorderColor: Color = Color(0xFFD1D5DB),
+    disabledBorderColor: Color = Color(0xFFE5E7EB),
+    errorBorderColor: Color = Color(0xFFEF4444),
+    contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
-    // Implementation would be similar to above but handling TextFieldValue instead
-    // For brevity, this is left as a stub
+    // Implementation similar to the String version but handling TextFieldValue
+    val isFocused by interactionSource.collectIsFocusedAsState()
+    val focusRequester = remember { FocusRequester() }
+
+    val borderColor by animateColorAsState(
+        targetValue = when {
+            !enabled -> disabledBorderColor
+            isError -> errorBorderColor
+            isFocused -> focusedBorderColor
+            else -> unfocusedBorderColor
+        },
+        label = "borderColor"
+    )
+
+    val animatedBorderWidth by animateDpAsState(
+        targetValue = if (isFocused) borderWidth * 1.5f else borderWidth,
+        label = "borderWidth"
+    )
+
+    Column(modifier = modifier) {
+        if (label != null) {
+            Box(
+                modifier = Modifier
+                    .padding(bottom = 6.dp)
+                    .fillMaxWidth()
+            ) {
+                CompositionLocalProvider(
+                    LocalTextStyle provides TextStyle(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = if (isError) errorBorderColor else Color(0xFF4B5563)
+                    )
+                ) {
+                    label()
+                }
+            }
+        }
+
+        Box(
+            modifier = Modifier
+                .clip(shape)
+                .background(if (enabled) backgroundColor else backgroundColor.copy(alpha = 0.6f))
+                .border(
+                    width = animatedBorderWidth,
+                    color = borderColor,
+                    shape = shape
+                )
+                .focusRequester(focusRequester)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(contentPadding),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (leadingIcon != null) {
+                    Box(
+                        modifier = Modifier.padding(end = 8.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        leadingIcon()
+                    }
+                }
+
+                Box(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    BasicTextField(
+                        value = value,
+                        onValueChange = onValueChange,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .onFocusChanged { /* Handle focus changes if needed */ },
+                        enabled = enabled,
+                        readOnly = readOnly,
+                        textStyle = textStyle,
+                        keyboardOptions = keyboardOptions,
+                        keyboardActions = keyboardActions,
+                        singleLine = singleLine,
+                        maxLines = maxLines,
+                        visualTransformation = visualTransformation,
+                        interactionSource = interactionSource,
+                        cursorBrush = SolidColor(cursorColor)
+                    )
+
+                    if (value.text.isEmpty() && placeholder != null) {
+                        CompositionLocalProvider(
+                            LocalTextStyle provides textStyle.copy(color = Color(0xFF9CA3AF))
+                        ) {
+                            placeholder()
+                        }
+                    }
+                }
+
+                if (trailingIcon != null) {
+                    Box(
+                        modifier = Modifier.padding(start = 8.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        trailingIcon()
+                    }
+                }
+            }
+        }
+
+        if (isError && errorMessage != null) {
+            Box(
+                modifier = Modifier
+                    .padding(top = 4.dp)
+                    .fillMaxWidth()
+            ) {
+                CompositionLocalProvider(
+                    LocalTextStyle provides TextStyle(
+                        fontSize = 12.sp,
+                        color = errorBorderColor
+                    )
+                ) {
+                    errorMessage()
+                }
+            }
+        }
+    }
 }
 
 // Helper extension for a text field with simple text label and placeholder
@@ -283,6 +401,7 @@ fun CustomTextField(
     errorText: String? = null,
     backgroundColor: Color = Color(0xFFF9FAFB),
     leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
     focusedBorderColor: Color = Color(0xFF3B82F6),
     unfocusedBorderColor: Color = Color(0xFFD1D5DB),
     cursorColor: Color = Color(0xFF3B82F6),
@@ -290,7 +409,15 @@ fun CustomTextField(
         fontSize = 16.sp,
         fontWeight = FontWeight.Normal,
         color = Color(0xFF1F2937)
-    )
+    ),
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    singleLine: Boolean = true,
+    maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
+    shape: Shape = RoundedCornerShape(8.dp),
+    enabled: Boolean = true,
+    readOnly: Boolean = false
 ) {
     CustomTextField(
         value = value,
@@ -302,9 +429,18 @@ fun CustomTextField(
         errorMessage = errorText?.let { { Text(text = it) } },
         backgroundColor = backgroundColor,
         leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
         focusedBorderColor = focusedBorderColor,
         unfocusedBorderColor = unfocusedBorderColor,
         cursorColor = cursorColor,
-        textStyle = textStyle
+        textStyle = textStyle,
+        visualTransformation = visualTransformation,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        singleLine = singleLine,
+        maxLines = maxLines,
+        shape = shape,
+        enabled = enabled,
+        readOnly = readOnly
     )
 }
