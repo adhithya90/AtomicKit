@@ -7,6 +7,7 @@ import androidx.compose.animation.core.animateValueAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -51,10 +52,10 @@ import androidx.compose.ui.unit.sp
  */
 data class BoxShadow(
     val offsetX: Dp = 0.dp,
-    val offsetY: Dp = 2.dp,
-    val blurRadius: Dp = 4.dp,
+    val offsetY: Dp = 0.dp,
+    val blurRadius: Dp = 0.dp,
     val spreadRadius: Dp = 0.dp,
-    val color: Color = Color(0x66000000) // 40% black
+    val color: Color = Color(0x00000000) // Transparent defaults
 )
 
 /**
@@ -325,23 +326,13 @@ private val BoxShadowVectorConverter = androidx.compose.animation.core.TwoWayCon
 )
 
 // Helper function for applying a border to the button
+@Composable
 private fun Modifier.applyButtonBorder(border: BorderStroke, shape: Shape): Modifier {
-    // Extract color from brush if it's a SolidColor brush
-    val borderColor = (border.brush as? androidx.compose.ui.graphics.SolidColor)?.value
-        ?: Color.Black // Fallback for non-solid color brushes
-
     return this.then(
-        Modifier
-            .padding(1.dp)  // Space for the border
-            .background(
-                color = borderColor,
-                shape = shape
-            )
-            .padding(border.width)  // Actual border width
-            .background(
-                color = Color.Transparent,
-                shape = shape
-            )
+        Modifier.border(
+            border = border,
+            shape = shape
+        )
     )
 }
 

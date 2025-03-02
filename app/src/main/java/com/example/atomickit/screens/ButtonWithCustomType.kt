@@ -1,5 +1,6 @@
 package com.example.atomickit.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -50,7 +51,7 @@ fun ButtonTypographyDemo() {
             // Header
             Column {
                 Text(
-                    text = "Button Showcase",
+                    text = "Components",
                     style = LocalAppTypography.current.h1,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -148,14 +149,9 @@ fun ButtonTypographyDemo() {
                     onClick = { /* do nothing */ },
                     text = "Outlined Button",
                     modifier = Modifier.fillMaxWidth(),
-                    backgroundColor = Color.White,
-                    contentColor = Color(0x0F000000),
-                    boxShadow = BoxShadow(
-                        offsetY = 2.dp,
-                        blurRadius = 4.dp,
-                        spreadRadius = 0.dp,
-                        color = Color(0x10000000)
-                    )
+                    backgroundColor = Color.Transparent,
+                    contentColor = Color(0xFF000000),
+                    border = BorderStroke(1.dp, Color(0xFF000000))
                 )
 
                 // Text button
@@ -164,7 +160,7 @@ fun ButtonTypographyDemo() {
                     text = "Text Button",
                     modifier = Modifier.fillMaxWidth(),
                     backgroundColor = Color.Transparent,
-                    contentColor = Color(0xFFEF4444),
+                    contentColor = Color(0xFF2196F3),
                     boxShadow = BoxShadow(0.dp, 0.dp, 0.dp, 0.dp, color = Color.Transparent)
                 )
             }
@@ -311,7 +307,7 @@ fun ButtonTypographyDemo() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, heightDp = 1200)
 @Composable
 fun ButtonTypographyDemoPreview() {
     ButtonTypographyDemo()

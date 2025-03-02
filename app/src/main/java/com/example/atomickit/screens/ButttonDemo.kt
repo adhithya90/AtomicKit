@@ -73,8 +73,7 @@ fun CustomCornerRadiusButtons() {
                 offsetY = 3.dp,
                 blurRadius = 6.dp,
                 color = Color(0x403B82F6)
-            ),
-            border = BorderStroke(2.dp, Color(0xFFE91E63))
+            )
         )
 
         Spacer(modifier = Modifier.height(8.dp))
