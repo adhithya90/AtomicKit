@@ -2,9 +2,7 @@ package com.example.atomickit.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,7 +19,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.atomickit.components.BoxShadow
 import com.example.atomickit.components.CustomCard
 import com.example.atomickit.components.Text
 
@@ -43,7 +42,7 @@ fun CustomCardShowcase() {
             .fillMaxSize()
             .background(Color(0xFFF8F9FA))
             .verticalScroll(rememberScrollState())
-            .padding(vertical = 40.dp, horizontal = 16.dp),
+            .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Text(
@@ -55,18 +54,23 @@ fun CustomCardShowcase() {
             )
         )
 
-        // Basic card with elevation
-        SectionTitle("Basic Card with Elevation")
+        // Basic card with box shadow
+        SectionTitle("Basic Card with Box Shadow")
         CustomCard(
             modifier = Modifier.fillMaxWidth(),
             backgroundColor = Color.White,
             contentColor = Color(0xFF1F2937),
-            elevation = 4.dp,
+            boxShadow = BoxShadow(
+                offsetY = 4.dp,
+                blurRadius = 8.dp,
+                spreadRadius = 0.dp,
+                color = Color(0x40000000)
+            ),
             shape = RoundedCornerShape(12.dp)
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "Basic Elevated Card",
+                    text = "Basic Card with Shadow",
                     style = TextStyle(
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
@@ -74,7 +78,7 @@ fun CustomCardShowcase() {
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "This card uses elevation to create a shadow effect with rounded corners.",
+                    text = "This card uses a custom box shadow effect with rounded corners.",
                     style = TextStyle(fontSize = 14.sp)
                 )
             }
@@ -91,7 +95,12 @@ fun CustomCardShowcase() {
                 end = Offset(Float.POSITIVE_INFINITY, 0f)
             ),
             contentColor = Color.White,
-            elevation = 2.dp,
+            boxShadow = BoxShadow(
+                offsetY = 2.dp,
+                blurRadius = 8.dp,
+                spreadRadius = 0.dp,
+                color = Color(0x406366F1)
+            ),
             shape = RoundedCornerShape(16.dp)
         ) {
             Column(modifier = Modifier.padding(20.dp)) {
@@ -110,13 +119,18 @@ fun CustomCardShowcase() {
             }
         }
 
-        // Card with border and no elevation
+        // Card with border and no shadow
         SectionTitle("Card with Border")
         CustomCard(
             modifier = Modifier.fillMaxWidth(),
             backgroundColor = Color.White,
             contentColor = Color(0xFF1F2937),
-            elevation = 0.dp,
+            boxShadow = BoxShadow(
+                offsetY = 0.dp,
+                blurRadius = 0.dp,
+                spreadRadius = 0.dp,
+                color = Color.Transparent
+            ),
             border = BorderStroke(
                 width = 2.dp,
                 brush = Brush.linearGradient(
@@ -137,7 +151,7 @@ fun CustomCardShowcase() {
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "This card uses a gradient border with no elevation for a flat design.",
+                    text = "This card uses a gradient border with no shadow for a flat design.",
                     style = TextStyle(fontSize = 14.sp)
                 )
             }
@@ -149,7 +163,13 @@ fun CustomCardShowcase() {
             modifier = Modifier.fillMaxWidth(),
             backgroundColor = Color(0xFFF0F9FF),
             contentColor = Color(0xFF0C4A6E),
-            elevation = 3.dp,
+            boxShadow = BoxShadow(
+                offsetX = 2.dp,
+                offsetY = 2.dp,
+                blurRadius = 8.dp,
+                spreadRadius = 0.dp,
+                color = Color(0x300C4A6E)
+            ),
             shape = RoundedCornerShape(
                 topStart = 24.dp,
                 topEnd = 4.dp,
@@ -176,18 +196,25 @@ fun CustomCardShowcase() {
         // Card with click interaction
         SectionTitle("Interactive Card")
         val interactionSource = remember { MutableInteractionSource() }
-        val isPressed by interactionSource.collectIsPressedAsState()
         CustomCard(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(
-                    interactionSource = interactionSource,
-                    indication = null
-                ) { /* Click action */ },
-            backgroundColor = if (isPressed) Color(0xFFE0F2FE) else Color.White,
+            modifier = Modifier.fillMaxWidth(),
+            backgroundColor = Color.White,
             contentColor = Color(0xFF0369A1),
-            elevation = if (isPressed) 1.dp else 4.dp,
-            shape = RoundedCornerShape(12.dp)
+            boxShadow = BoxShadow(
+                offsetY = 3.dp,
+                blurRadius = 8.dp,
+                spreadRadius = 0.dp,
+                color = Color(0x400369A1)
+            ),
+            pressedBoxShadow = BoxShadow(
+                offsetY = 1.dp,
+                blurRadius = 3.dp,
+                spreadRadius = 0.dp,
+                color = Color(0x200369A1)
+            ),
+            shape = RoundedCornerShape(12.dp),
+            onClick = { /* Click action */ },
+            interactionSource = interactionSource
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
@@ -199,7 +226,7 @@ fun CustomCardShowcase() {
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "This card responds to press interactions by changing its elevation and background color.",
+                    text = "This card responds to press interactions by changing its shadow depth.",
                     style = TextStyle(fontSize = 14.sp)
                 )
             }
@@ -245,7 +272,12 @@ fun CustomCardShowcase() {
             modifier = Modifier.fillMaxWidth(),
             backgroundColor = Color.White,
             contentColor = Color(0xFF1F2937),
-            elevation = 2.dp,
+            boxShadow = BoxShadow(
+                offsetY = 2.dp,
+                blurRadius = 6.dp,
+                spreadRadius = 0.dp,
+                color = Color(0x300EA5E9)
+            ),
             shape = RoundedCornerShape(12.dp)
         )
 
@@ -255,7 +287,12 @@ fun CustomCardShowcase() {
             modifier = Modifier.fillMaxWidth(),
             backgroundColor = Color(0xFFF8FAFC),
             contentColor = Color(0xFF1E293B),
-            elevation = 1.dp,
+            boxShadow = BoxShadow(
+                offsetY = 1.dp,
+                blurRadius = 4.dp,
+                spreadRadius = 0.dp,
+                color = Color(0x201E293B)
+            ),
             contentPadding = PaddingValues(
                 top = 24.dp,
                 start = 16.dp,
@@ -290,7 +327,13 @@ fun CustomCardShowcase() {
                 radius = 500f
             ),
             contentColor = Color(0xFF064E3B),
-            elevation = 3.dp,
+            boxShadow = BoxShadow(
+                offsetX = 2.dp,
+                offsetY = 3.dp,
+                blurRadius = 10.dp,
+                spreadRadius = 0.dp,
+                color = Color(0x4022C55E)
+            ),
             shape = RoundedCornerShape(16.dp)
         ) {
             Column(modifier = Modifier.padding(20.dp)) {
@@ -315,7 +358,12 @@ fun CustomCardShowcase() {
             modifier = Modifier.fillMaxWidth(),
             backgroundColor = Color(0xFFEFF6FF),
             contentColor = Color(0xFF1E40AF),
-            elevation = 4.dp,
+            boxShadow = BoxShadow(
+                offsetY = 4.dp,
+                blurRadius = 12.dp,
+                spreadRadius = 1.dp,
+                color = Color(0x301E40AF)
+            ),
             shape = RoundedCornerShape(16.dp)
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
@@ -348,7 +396,12 @@ fun CustomCardShowcase() {
                             colors = listOf(Color(0xFFE9D5FF), Color(0xFFA855F7))
                         ),
                         contentColor = Color.White,
-                        elevation = 2.dp,
+                        boxShadow = BoxShadow(
+                            offsetY = 2.dp,
+                            blurRadius = 6.dp,
+                            spreadRadius = 0.dp,
+                            color = Color(0x40A855F7)
+                        ),
                         shape = RoundedCornerShape(8.dp)
                     ) {
                         Column(
@@ -375,7 +428,12 @@ fun CustomCardShowcase() {
                         modifier = Modifier.weight(1f),
                         backgroundColor = Color.White,
                         contentColor = Color(0xFF6366F1),
-                        elevation = 0.dp,
+                        boxShadow = BoxShadow(
+                            offsetY = 0.dp,
+                            blurRadius = 0.dp,
+                            spreadRadius = 0.dp,
+                            color = Color.Transparent
+                        ),
                         border = BorderStroke(1.dp, Color(0xFF6366F1)),
                         shape = RoundedCornerShape(8.dp)
                     ) {
@@ -414,7 +472,13 @@ fun CustomCardShowcase() {
                 )
             ),
             contentColor = Color.White,
-            elevation = 6.dp,
+            boxShadow = BoxShadow(
+                offsetX = 0.dp,
+                offsetY = 8.dp,
+                blurRadius = 24.dp,
+                spreadRadius = 0.dp,
+                color = Color(0x600F172A)
+            ),
             shape = RoundedCornerShape(24.dp),
             contentPadding = PaddingValues(24.dp)
         ) {
@@ -457,7 +521,7 @@ fun CustomCardShowcase() {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "This premium card showcases a sweep gradient background with increased elevation for a luxury feel.",
+                    text = "This premium card showcases a sweep gradient background with dramatic shadow.",
                     style = TextStyle(
                         fontSize = 14.sp,
                         color = Color.White.copy(alpha = 0.8f)
@@ -483,11 +547,95 @@ fun CustomCardShowcase() {
             }
         }
 
+        // Card with floating effect
+        SectionTitle("Floating Card Effect")
+        CustomCard(
+            modifier = Modifier.fillMaxWidth(),
+            backgroundColor = Color.White,
+            contentColor = Color(0xFF1F2937),
+            boxShadow = BoxShadow(
+                offsetY = 12.dp,
+                blurRadius = 32.dp,
+                spreadRadius = -8.dp,
+                color = Color(0x401F2937)
+            ),
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = "Floating Card Effect",
+                    style = TextStyle(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "This card creates a floating effect with a spread radius that makes the shadow appear to float beneath the card.",
+                    style = TextStyle(fontSize = 14.sp)
+                )
+            }
+        }
+
+        // Multiple shadows card
+        SectionTitle("Card with Multi-directional Shadow")
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            // Bottom shadow
+            CustomCard(
+                modifier = Modifier.fillMaxWidth(),
+                backgroundColor = Color.White,
+                contentColor = Color(0xFF1F2937),
+                boxShadow = BoxShadow(
+                    offsetY = 8.dp,
+                    blurRadius = 16.dp,
+                    spreadRadius = -4.dp,
+                    color = Color(0x30000000)
+                ),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                // Content with side shadow - need to nest cards to get multiple shadows
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = "Multi-directional Shadow",
+                        style = TextStyle(
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "This card demonstrates how to create the illusion of multi-directional shadows by using shadow offset and spread radius to control shadow direction and size.",
+                        style = TextStyle(fontSize = 14.sp)
+                    )
+                }
+            }
+        }
+
+        // Simple titled card example
+        SectionTitle("Simple Titled Card")
+        CustomCard(
+            titleText = "Simplified API Example",
+            contentText = "This card uses the simplified API with title and content text parameters for quick creation of standard cards with proper typography.",
+            backgroundColor = Color.White,
+            contentColor = Color(0xFF1F2937),
+            boxShadow = BoxShadow(
+                offsetY = 2.dp,
+                blurRadius = 8.dp,
+                color = Color(0x30000000)
+            ),
+            modifier = Modifier.fillMaxWidth()
+        )
+
         Spacer(modifier = Modifier.height(24.dp))
     }
 }
 
-@Preview(showBackground = true, heightDp = 2000)
+
+@Preview(showBackground = true, heightDp = 1200)
 @Composable
 fun CustomCardShowcasePreview() {
     CustomCardShowcase()
