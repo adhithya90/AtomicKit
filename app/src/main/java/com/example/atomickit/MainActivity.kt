@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.atomickit.screens.ButtonTypographyDemo
 import com.example.atomickit.screens.SimpleDemoNoTheme
 import com.example.atomickit.ui.theme.AtomicKitTheme
 
@@ -15,7 +16,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
-            SimpleDemoNoTheme()
+            ButtonTypographyDemo()
 
         }
     }
@@ -24,5 +25,5 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun SimpleScreenPreview() {
-    SimpleDemoNoTheme()
+    ButtonTypographyDemo()
 }

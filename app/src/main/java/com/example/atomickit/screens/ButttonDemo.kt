@@ -41,7 +41,7 @@ fun CustomCornerRadiusButtons() {
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
             .background(Color(0xFFF8F9FA))
-            .padding(16.dp),
+            .padding(vertical = 40.dp, horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         // Title

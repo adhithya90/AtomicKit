@@ -57,7 +57,7 @@ fun SimpleDemoNoTheme() {
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(16.dp)
+            .padding(vertical = 40.dp, horizontal = 16.dp)
             .background(background),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {

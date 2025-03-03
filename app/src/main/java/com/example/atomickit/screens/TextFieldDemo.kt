@@ -25,6 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -66,7 +67,7 @@ fun TextFieldDemo() {
             .fillMaxSize()
             .background(background)
             .verticalScroll(rememberScrollState())
-            .padding(bottom = 24.dp),
+            .padding(vertical = 56.dp, horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         // App Bar
@@ -74,7 +75,8 @@ fun TextFieldDemo() {
             titleText = "TextField Components",
             backgroundColor = primary,
             contentColor = Color.White,
-            elevation = 4.dp
+            elevation = 4.dp,
+            modifier = Modifier.clip(RoundedCornerShape(16.dp))
         )
 
         // Content with padding
