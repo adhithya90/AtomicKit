@@ -3,10 +3,12 @@
 AtomicKit is a collection of customizable, atomic Compose UI components built with a focus on simplicity, customization, and modern design patterns.
 
 <p align="center">
-  <img src="/screenshots/components1.png" width="25%" />
-  <img src="/screenshots/components2.png" width="25%" /> 
-  <img src="/screenshots/textfield1.png" width="25%" />
-<img src="/screenshots/textfield2.png" width="25%" />
+  <img src="/screenshots/components1.png" width="32%" />
+  <img src="/screenshots/textfield1.png" width="32%" />
+  <img src="/screenshots/textfield2.png" width="32%" />
+</p>
+<p align="center">
+  <img src="/screenshots/components2.png" width="100%" />
 </p>
 
 ## Features
