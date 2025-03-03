@@ -260,7 +260,6 @@ fun TextFieldDemo() {
 
             CustomCard(
                 modifier = Modifier.fillMaxWidth(),
-                elevation = 4.dp,
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Column(

@@ -42,7 +42,7 @@ fun CustomCardShowcase() {
             .fillMaxSize()
             .background(Color(0xFFF8F9FA))
             .verticalScroll(rememberScrollState())
-            .padding(16.dp),
+            .padding(vertical = 52.dp, horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Text(

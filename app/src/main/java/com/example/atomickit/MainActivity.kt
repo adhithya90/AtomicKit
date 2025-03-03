@@ -7,7 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.atomickit.screens.ButtonTypographyDemo
-import com.example.atomickit.screens.SimpleDemoNoTheme
 import com.example.atomickit.ui.theme.AtomicKitTheme
 
 class MainActivity : ComponentActivity() {
