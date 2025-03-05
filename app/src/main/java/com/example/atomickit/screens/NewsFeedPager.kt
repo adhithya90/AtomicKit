@@ -191,7 +191,7 @@ fun NewsCard(
 ) {
     CustomCard(
         modifier = modifier,
-        backgroundColor = Color(0xFF1D2951),
+        backgroundColor = Color(0xFF04091A),
         contentColor = Color.White,
         shape = RoundedCornerShape(16.dp),
         boxShadow = BoxShadow(
