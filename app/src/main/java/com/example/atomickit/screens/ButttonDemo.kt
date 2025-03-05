@@ -149,9 +149,9 @@ fun CustomCornerRadiusButtons() {
         SectionTitle("Special Corner Patterns")
 
         // Ticket-style button (one side flat, one rounded)
-        Row(
+        Column(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             // Left-side ticket
             CustomButton(

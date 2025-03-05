@@ -166,7 +166,9 @@ fun LabeledSwitch(
     trackColor: Color = Color(0xFF3B82F6),
     trackColorUnchecked: Color = Color(0xFFE5E7EB),
     thumbColor: Color = Color.White,
-    thumbColorUnchecked: Color = Color.White
+    thumbColorUnchecked: Color = Color.White,
+
+
 ) {
     Row(
         modifier = modifier
