@@ -153,6 +153,10 @@ The `ResponsiveLayout` component system for AtomicKit provides a flexible and po
 
 A container component that measures the screen dimensions and provides them to child components via a CompositionLocal.
 
+<p align="center">
+  <img src="/screenshots/responsiveLayout.gif" width="100%" />
+</p>
+
 ```kotlin
 ResponsiveLayoutProvider {
     // All responsive components inside will have access to screen dimensions
