@@ -92,8 +92,8 @@ fun NewsFeedPager(
         listOf(
             NewsItem(
                 id = "1",
-                title = "Apple Announces New Developer Tools",
-                summary = "Apple has unveiled a suite of new developer tools at their annual conference, designed to simplify app creation and improve performance across their ecosystem.",
+                title = "TechGiant Announces New Developer Tools",
+                summary = "TechGiant has unveiled a suite of new developer tools at their annual conference, designed to simplify app creation and improve performance across their ecosystem.",
                 imageUrl = "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1000",
                 source = "techcrunch"
             ),
