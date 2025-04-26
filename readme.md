@@ -1,5 +1,9 @@
 # AtomicKit
 
+<p align="center">
+<img src="/screenshots/cover.gif" width="100%" />
+</p>
+
 AtomicKit is a collection of customizable, atomic Compose UI components built with a focus on simplicity, customization, and modern design patterns.
 
 <p align="center">
